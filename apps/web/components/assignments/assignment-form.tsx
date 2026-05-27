@@ -19,7 +19,7 @@ const rowSchema = z.object({
 });
 
 const formSchema = z.object({
-  title: z.string().trim().min(3).max(120),
+  title: z.string().trim().min(1, "Assignment name is required").max(120),
   subject: z.string().trim().min(2).max(80),
   className: z.string().trim().min(1).max(60),
   dueDate: z.string().date(),
@@ -49,7 +49,7 @@ export function AssignmentForm(): JSX.Element {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "Quiz on Electricity",
+      title: "",
       subject: "Science",
       className: "5th",
       dueDate: "",
@@ -154,7 +154,6 @@ export function AssignmentForm(): JSX.Element {
 
   return (
     <form className="assignmentForm" onSubmit={form.handleSubmit(onSubmit)}>
-      <input type="hidden" {...form.register("title")} />
       <input type="hidden" {...form.register("subject")} />
       <input type="hidden" {...form.register("className")} />
       <input type="hidden" {...form.register("materialText")} />
@@ -196,6 +195,20 @@ export function AssignmentForm(): JSX.Element {
           <h3>Assignment Details</h3>
           <p>Basic information about your assignment</p>
         </div>
+        <label className="assignmentDueField">
+          <span>Assignment Name *</span>
+          <input
+            type="text"
+            {...form.register("title")}
+            placeholder="Enter assignment name"
+            required
+          />
+        </label>
+        {form.formState.errors.title ? (
+          <p className="inlineError">
+            {form.formState.errors.title.message ?? "Assignment name is required."}
+          </p>
+        ) : null}
         <div
           className="uploadDropzone"
           onClick={() => fileInputRef.current?.click()}
