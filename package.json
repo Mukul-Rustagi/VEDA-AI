@@ -1,0 +1,27 @@
+{
+  "name": "vedaai-hiring-assignment",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "predev": "npm run build -w packages/shared",
+    "dev": "concurrently -n web,api,worker -c green,cyan,magenta \"npm run dev -w apps/web\" \"npm run dev -w apps/api\" \"npm run worker -w apps/api\"",
+    "prebuild": "npm run build -w packages/shared",
+    "build": "npm run build -w apps/api && npm run build -w apps/web",
+    "lint": "npm run lint -ws --if-present",
+    "pretypecheck": "npm run build -w packages/shared",
+    "typecheck": "npm run typecheck -ws --if-present",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.12.0"
+  }
+}
